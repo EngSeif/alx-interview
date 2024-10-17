@@ -39,10 +39,8 @@ def minOperations(n):
     Calc least number of operation (Copy all and paste)
     to have n chars of H
     """
-    if n <= 1:
+    if n <= 1 or isPrime(n):
         return 0
-    if isPrime(n):
-        return n
     nOperation = 0
     for i in range(2, n + 1):
         while n % i == 0:
