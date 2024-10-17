@@ -41,19 +41,14 @@ def minOperations(n):
     """
     if (n <= 1):
         return 0
-    elif(isPrime(n)):
+    if(isPrime(n)):
         return n
-    else:
-        nOperation = 2
-        nOfHs = 2
-        increase = 1
-        while (n != nOfHs):
-            if (nOfHs >= 9):
-                break
-            if (n % nOfHs == 0):
-                nOperation += 2
-                increase = nOfHs
-            else:
-                nOperation += 1
-            nOfHs += increase
-        return nOperation
+    nOperation = 2
+    nOfHs = 2
+    while (nOfHs < n):
+        if (n % nOfHs == 0):
+            nOperation += 2
+        else:
+            nOperation += 1
+        nOfHs += nOfHs
+    return nOperation
