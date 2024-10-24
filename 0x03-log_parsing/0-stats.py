@@ -20,7 +20,6 @@
 """
 import re
 import sys
-import signal
 
 total_file_size = 0
 codes_num = {
@@ -46,13 +45,6 @@ def printOut():
             print(f"{key}: {codes_num[key]}")
 
 
-def terminate_handle(signum, frame):
-    printOut()
-    sys.exit()
-
-
-signal.signal(signal.SIGINT, terminate_handle)
-
 log_pattern = re.compile(
     r"""
     ^(?P<ip>[\d\.]+)
@@ -70,8 +62,8 @@ log_pattern = re.compile(
 
 try:
     for line in sys.stdin:
-
-        match = log_pattern.match(line)
+        line = line.strip()
+        match = log_pattern.fullmatch(line)
 
         if match:
             total_file_size += int(match.group('file_size'))
@@ -84,5 +76,5 @@ try:
             if itr % 10 == 0:
                 printOut()
 
-except KeyboardInterrupt:
+finally:
     printOut()
