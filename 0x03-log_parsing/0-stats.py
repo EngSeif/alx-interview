@@ -52,8 +52,8 @@ def terminate_handle(signum, frame):
 
 signal.signal(signal.SIGINT, terminate_handle)
 
-for line in sys.stdin:
-    try:
+try:
+    for line in sys.stdin:
         if itr == 10:
             printOut()
             itr = 0
@@ -69,5 +69,5 @@ for line in sys.stdin:
             codes_num[code] += 1
 
         itr += 1
-    except(ValueError, IndexError):
-        continue
+except KeyboardInterrupt:
+    printOut()
