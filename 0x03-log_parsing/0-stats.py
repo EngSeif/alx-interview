@@ -46,19 +46,7 @@ def printOut():
 
 
 log_pattern = re.compile(
-    r"""
-    ^(?P<ip>[\d\.]+)
-    \s-\s
-    \[(?P<date>[^\]]+)\]
-    \s"
-    (?P<method>GET)
-    \s(?P<path>/projects/\d+)
-    \sHTTP/\d+\.\d+"
-    \s(?P<status_code>\d{3})
-    \s(?P<file_size>\d+)$
-    """,
-    re.VERBOSE
-)
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" (.{3}) (\d+)')  # nopep8
 
 try:
     for line in sys.stdin:
@@ -66,8 +54,8 @@ try:
         match = log_pattern.fullmatch(line)
 
         if match:
-            total_file_size += int(match.group('file_size'))
-            code = match.group('status_code')
+            total_file_size += int(match.group(2))
+            code = match.group(1)
 
             if code in codes_num:
                 codes_num[code] += 1
