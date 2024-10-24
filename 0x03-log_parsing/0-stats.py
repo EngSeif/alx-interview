@@ -18,6 +18,7 @@
     *format: <status code>: <number>
     *status codes should be printed in ascending order
 """
+import re
 import sys
 import signal
 
@@ -52,22 +53,36 @@ def terminate_handle(signum, frame):
 
 signal.signal(signal.SIGINT, terminate_handle)
 
+log_pattern = re.compile(
+    r"""
+    ^(?P<ip>[\d\.]+)
+    \s-\s
+    \[(?P<date>[^\]]+)\]
+    \s"
+    (?P<method>GET)
+    \s(?P<path>/projects/\d+)
+    \sHTTP/\d+\.\d+"
+    \s(?P<status_code>\d{3})
+    \s(?P<file_size>\d+)$
+    """,
+    re.VERBOSE
+)
+
 try:
     for line in sys.stdin:
-        if itr == 10:
-            printOut()
-            itr = 0
 
-        inArr = line.strip().split(" ")
-        if len(inArr) != 9:
-            continue
+        match = log_pattern.match(line)
 
-        total_file_size += int(inArr[8])
-        code = inArr[7]
+        if match:
+            total_file_size += int(match.group('file_size'))
+            code = match.group('status_code')
 
-        if code in codes_num:
-            codes_num[code] += 1
+            if code in codes_num:
+                codes_num[code] += 1
 
-        itr += 1
+            itr += 1
+            if itr % 10 == 0:
+                printOut()
+
 except KeyboardInterrupt:
     printOut()
