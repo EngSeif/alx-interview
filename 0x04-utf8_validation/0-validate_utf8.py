@@ -9,8 +9,6 @@ def validUTF8(data):
     Determines if a given data set
     represents a valid UTF-8 encoding.
     """
-    if len(data) == 0:
-        return False
     i = 0
     while i < len(data):
         byte = bin(data[i])[2:].zfill(8)
