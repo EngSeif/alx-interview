@@ -26,7 +26,7 @@ def validUTF8(data):
             return False
 
         # Check if there are enough bytes remaining in the data
-        if i + num_bytes > len(data):
+        if i + num_bytes >= len(data):
             return False
 
         # Validate continuation bytes: they must all start with '10'
