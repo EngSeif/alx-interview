@@ -16,24 +16,20 @@ def validUTF8(data):
             i += 1
             continue
         elif binany_num[:3] == '110':
-            i += 1
-            for j in range(i, i + 1):
-                num = bin(data[i])[2:].zfill(8)
-                if num[:2] != '10':
-                    return False
-            i += 1
+            num_bytes = 2
         elif binany_num[:4] == '1110':
-            i += 1
-            for j in range(i, i + 2):
-                num = bin(data[j])[2:].zfill(8)
-                if num[:2] != '10':
-                    return False
-            i += 2
+            num_bytes = 3
         elif binany_num[:5] == '11110':
-            i += 1
-            for j in range(i, i + 3):
-                num = bin(data[j])[2:].zfill(8)
-                if num[:2] != '10':
-                    return False
-            i += 3
+            num_bytes = 4
+        else:
+            return False
+
+        if i + num_bytes >= len(data):
+            return False
+
+        for j in range(1, num_bytes):
+            binany_num = bin(data[i + j])[2:].zfill(8)
+            if binany_num[:2] != '10':
+                return False
+        i += num_bytes
     return True
