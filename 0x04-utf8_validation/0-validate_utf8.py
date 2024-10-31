@@ -29,9 +29,9 @@ def validUTF8(data):
         for j in range(1, num_bytes):
             cont_byte = ''
             if i + j >= len(data):
-                cont_byte = bin(data[i + j])[2:].zfill(8)
+                return False
             else:
-                False
+                cont_byte = bin(data[i + j])[2:].zfill(8)
             if not cont_byte.startswith('10'):
                 return False
         i += num_bytes
