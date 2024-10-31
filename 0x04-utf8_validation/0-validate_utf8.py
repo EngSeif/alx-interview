@@ -11,8 +11,9 @@ def validUTF8(data):
     """
     i = 0
     while i < len(data):
+        if data[i] > 255:
+            return False
         byte = bin(data[i])[2:].zfill(8)
-        # Determine how many bytes are expected based on the leading bits
         if byte.startswith('11110'):
             num_bytes = 4
         elif byte.startswith('1110'):
@@ -20,23 +21,21 @@ def validUTF8(data):
         elif byte.startswith('110'):
             num_bytes = 2
         elif byte.startswith('10'):
-            return False  # A continuation byte cannot start with '10'
+            return False
         elif byte.startswith('0'):
             num_bytes = 1
         else:
-            return False  # Invalid starting byte
+            return False
 
-        # Check if we have enough bytes left
         if i + num_bytes > len(data):
             return False
 
-        # Validate continuation bytes
         for j in range(1, num_bytes):
             if i + j >= len(data):
-                return False  # Not enough bytes remaining
+                return False
             cont_byte = bin(data[i + j])[2:].zfill(8)
             if not cont_byte.startswith('10'):
-                return False  # Invalid continuation byte
+                return False
 
         i += num_bytes
 
